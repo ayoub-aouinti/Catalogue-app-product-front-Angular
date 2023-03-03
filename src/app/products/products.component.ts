@@ -14,13 +14,13 @@ export class ProductsComponent implements OnInit {
   products! : Array<Product>;
   currentPage : number=0;
   pageSize: number =5;
-  totalPages : number=0;  
+  totalPages : number=0;
   errorMessage! : string;
   searchFormGroup! : FormGroup;
   currentAction : string="all";
 
   constructor(private productService : ProductService, private fb : FormBuilder,
-              public authService : AuthenticationService  
+              public authService : AuthenticationService
               ) {}
 
   ngOnInit(): void {
@@ -37,18 +37,19 @@ export class ProductsComponent implements OnInit {
         this.totalPages=data.totalPages;
       },
       error : (err)=> {
-        this.errorMessage=err;  
+        this.errorMessage=err;
       },
      });
   };
-  
+
   handleGetAllProducts(){
-    this.productService.getAllProducts().subscribe({
+    this.productService.getAllProducts()
+      .subscribe({
       next : (data : any[])=>{
         this.products=data;
       },
       error : (err)=> {
-        this.errorMessage=err;  
+        this.errorMessage=err;
       },
      });
   };
@@ -58,7 +59,7 @@ export class ProductsComponent implements OnInit {
     if(conf==false) return;
     this.productService.deleteProduct(p.id).subscribe({
       next : (data : boolean)=>{
-        //this.handleGetAllProducts(); 
+        //this.handleGetAllProducts();
         let index=this.products.indexOf(p);
         this.products.splice(index, 1);
       }
@@ -90,7 +91,7 @@ export class ProductsComponent implements OnInit {
     this.currentPage=i;
     if(this.currentAction==='all')
       this.handleGetPageProducts();
-    else 
+    else
     this.handleSearchProducts();
   }
 }

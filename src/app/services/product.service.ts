@@ -3,13 +3,14 @@ import { Observable, of, throwError } from 'rxjs';
 import { __values } from 'tslib';
 import { PageProduct, Product } from '../model/product.model';
 import { UUID } from 'angular2-uuid';
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 private products! : Array<Product>;
-  constructor() { 
+  constructor(private httpClient: HttpClient) {
     this.products=[
       {id:UUID.UUID(), name: "computer", price : 3500, promotion : true},
       {id:UUID.UUID(), name: "imprimante", price : 1200, promotion : false},
@@ -23,18 +24,16 @@ private products! : Array<Product>;
   }
 
   public getAllProducts() : Observable<Product[]>{
-    let rnd=Math.random();
-    if(rnd<0.1) return throwError(()=>("Internet connexion error"));
-    else return of([...this.products]);
+     return of([...this.products]);
   }
 
-  public getPageProducts(page : number, size : number) : Observable<PageProduct>{
-    let index =page*size;
-    let totalPages = ~~(this.products.length/size);
-    if (this.products.length % size !=0)
-    totalPages++;
-    let pageProducts = this.products.slice(index,index+size);
-    return of({page:page, size:size, totalPages:totalPages, products:pageProducts});
+  public  getPageProducts(page: number, size: number): Observable<PageProduct> {
+    // let index =page*size;
+    // let totalPages = ~~(this.products.length/size);
+    // if (this.products.length % size !=0)
+    // totalPages++;
+    // let pageProducts = this.products.slice(index,index+size);
+    return this.httpClient.get("http://127.0.0.1:3000/api/products/page?page=0&size=33") as Observable<PageProduct>;
   }
   /**
    * name
